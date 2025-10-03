@@ -1,0 +1,123 @@
+#HTML CODE
+
+<h1>Password Strength Checker</h1>
+<input type="password" id="password" placeholder="Enter your password">
+<div class="strength" id="strength">Strength: </div>
+<ul class="criteria" id="criteria">
+  <li id="length" class="unmet">Minimum 8 characters</li>
+  <li id="uppercase" class="unmet">At least 1 uppercase letter</li>
+  <li id="lowercase" class="unmet">At least 1 lowercase letter</li>
+  <li id="number" class="unmet">At least 1 number</li>
+  <li id="special" class="unmet">At least 1 special character (!@#$%^&* etc.)</li>
+</ul>
+
+#CSS
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+}
+
+h1 {
+  color: #333;
+}
+
+input[type="password"] {
+  padding: 10px;
+  width: 300px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.strength {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.criteria {
+  list-style: none;
+  padding: 0;
+}
+
+.criteria li {
+  margin: 5px 0;
+}
+
+.met {
+  color: green;
+}
+
+.unmet {
+  color: red;
+}
+
+
+#JS
+
+const passwordInput = document.getElementById('password');
+const strengthText = document.getElementById('strength');
+const criteriaElements = {
+  length: document.getElementById('length'),
+  uppercase: document.getElementById('uppercase'),
+  lowercase: document.getElementById('lowercase'),
+  number: document.getElementById('number'),
+  special: document.getElementById('special')
+};
+
+passwordInput.addEventListener('input', () => {
+  const password = passwordInput.value;
+  let score = 0;
+
+  // Length
+  if (password.length >= 8) {
+    score++;
+    criteriaElements.length.classList.replace('unmet', 'met');
+  } else {
+    criteriaElements.length.classList.replace('met', 'unmet');
+  }
+
+  // Uppercase
+  if (/[A-Z]/.test(password)) {
+    score++;
+    criteriaElements.uppercase.classList.replace('unmet', 'met');
+  } else {
+    criteriaElements.uppercase.classList.replace('met', 'unmet');
+  }
+
+  // Lowercase
+  if (/[a-z]/.test(password)) {
+    score++;
+    criteriaElements.lowercase.classList.replace('unmet', 'met');
+  } else {
+    criteriaElements.lowercase.classList.replace('met', 'unmet');
+  }
+
+  // Number
+  if (/\d/.test(password)) {
+    score++;
+    criteriaElements.number.classList.replace('unmet', 'met');
+  } else {
+    criteriaElements.number.classList.replace('met', 'unmet');
+  }
+
+  // Special character
+  if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    score++;
+    criteriaElements.special.classList.replace('unmet', 'met');
+  } else {
+    criteriaElements.special.classList.replace('met', 'unmet');
+  }
+
+  // Update strength
+  let strength = '';
+  if (score === 5) strength = 'Very Strong';
+  else if (score === 4) strength = 'Strong';
+  else if (score === 3) strength = 'Medium';
+  else if (score === 2) strength = 'Weak';
+  else strength = 'Very Weak';
+
+  strengthText.textContent = `Strength: ${strength}`;
+});
